@@ -11,22 +11,10 @@ namespace UnityPackageImporter.Extractor
 {
     public class UnityPackageExtractor
     {
-
         private readonly static string extractor64Bit = Path.Combine("nml_mods", "unityPackageExtractor", "extractor64.exe");
         private readonly static string extractor86Bit = Path.Combine("nml_mods", "unityPackageExtractor", "extractor86.exe");
 
-        public static readonly List<string> valid2DFileExtensions = new List<string>()
-        {
-            ".jpeg",
-            ".jpg",
-            ".png",
-        };
-
-        public static readonly List<string> valid3DFileExtensions = new List<string>()
-        {
-            ".fbx",
-        };
-
+        // TODO Hide the console window when done debugging
         public void Unpack(string pathToPackage, string outputPath)
         {
             var process = new Process();
@@ -46,5 +34,4 @@ namespace UnityPackageImporter.Extractor
             UniLog.Log(e.Data);
         }
     }
-
 }
