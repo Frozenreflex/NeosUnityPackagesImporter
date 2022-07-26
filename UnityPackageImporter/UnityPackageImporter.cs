@@ -29,19 +29,25 @@ namespace UnityPackageImporter
         private static void AssetPatch()
         {
             var aExt = Traverse.Create(typeof(AssetHelper)).Field<Dictionary<AssetClass, List<string>>>("associatedExtensions");
-            aExt.Value[AssetClass.Special].Add("unitypackage");
+            aExt.Value[AssetClass.Model].Add("unitypackage");
         }
 
         [HarmonyPatch(typeof(UniversalImporter), "Import")]
+        [HarmonyPatch(new[] { typeof(UniversalImporter) })]
         public class UniversalImporterPatch
         {
             private static bool Prefix(ref IEnumerable<string> files)
             {
-                var unitypackages = files.Where(f => Path.GetExtension(f).ToLower() == ".unitypackage");
+                var unitypackages = files.Where(f => Path.GetExtension(f).ToLower() == "unitypackage"); 
                 foreach (var unitypackage in unitypackages) // Parallel.For here?
                 {
                     // Should add decomposed files and remove duplicates??
                     files.Union(DecomposeUnityPackage(unitypackage));
+                }
+
+                foreach (var file in files)
+                {
+                    Msg("File to import: " + file);
                 }
                 
                 return true;
